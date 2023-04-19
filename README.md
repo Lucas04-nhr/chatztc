@@ -22,8 +22,10 @@ cp ./plugins/chatztc/config/config.json.example ./plugins/chatztc/config/config.
 "post_url": "http://0.0.0.0:8000",
 
 
-2.
+3.修改配置文件，是否让插件关闭直接对话，就是不需要使用'#ai:你好'，而是直接说'你好',默认是开启的
+./plugins/chatztc/config/config.json
 
+"answer_all_chat": true
 
 #### 参与贡献
 
