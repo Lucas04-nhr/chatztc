@@ -29,5 +29,3 @@ cp ./plugins/chatztc/config/config.json.example ./plugins/chatztc/config/config.
 
 #### 参与贡献
 
-#### 特技
-
