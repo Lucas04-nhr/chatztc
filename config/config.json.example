@@ -1,6 +1,6 @@
 {
 	"type": "post",
-	"post_url": "http://chat.charrobot.com",
+	"post_url": "http://0.0.0.0:8000",
 	"history_num": 3,
 	"str_prefix": {
 		"help": {
