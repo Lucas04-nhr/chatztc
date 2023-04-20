@@ -11,16 +11,17 @@
 git clone --depth=1 https://gitee.com/394911284/chatztc.git ./plugins/chatztc/
 
 第 2 步：复制示例配置，生成本地配置文件
+
 cp ./plugins/chatztc/config/config.json.example ./plugins/chatztc/config/config.json
 
 第 3 步：修改本地配置文件的ChatGLM的api的端口地址
 ./plugins/chatztc/config/config.json
-
+配置项：
 "post_url": "http://0.0.0.0:8000",
 
 第 4 步：（可选）修改配置文件，是否让插件关闭直接对话，就是不能直接说'你好'，只能使用'#ai:你好'
 ./plugins/chatztc/config/config.json
-
+配置项：
 "answer_all_chat": true
 
 第 5 步：
@@ -40,7 +41,7 @@ cp ./plugins/chatztc/config/config.json.example ./plugins/chatztc/config/config.
 
 #ai设置记忆条数
 
-用来设置ai保存的历史聊天数量,示例:#ai设置记忆条数3
+用来设置ai保存的历史聊天数量,数量太多可能会爆显存。示例:#ai设置记忆条数3
 
 #ai获取设置的记忆条数
 
