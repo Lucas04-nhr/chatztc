@@ -415,8 +415,8 @@ export class ChatZTC extends plugin {
 						find_str_prefix_text = false;
 			}
 		}else{
-			//没有找到完全匹配的关键词前缀，同时是以#开始的字符串
-			if(e.msg.substr(0,"#".length)=="#" && ChatGLMConfig.automatic_suggestion_order){
+			//没有找到完全匹配的关键词前缀，同时匹配到了公共前缀
+			if(ChatGLMConfig.public_prefix == e.msg.substr(0,ChatGLMConfig.public_prefix.length) && ChatGLMConfig.automatic_suggestion_order){
 				var key_rate_arr = [];
 				for(var key in ChatGLMConfig.str_prefix){
 					var rate = strDiff.strGetDiffRate(ChatGLMWebSocket.get_config_text(key),e.msg);
@@ -435,7 +435,7 @@ export class ChatZTC extends plugin {
 		}
 
 		//不是#开头的字符串进来了可以直接触发聊天
-		if(ChatGLMConfig.answer_all_chat){
+		if(ChatGLMConfig.answer_all_chat && ChatGLMConfig.public_prefix != e.msg.substr(0,ChatGLMConfig.public_prefix.length)){
 			if(!find_str_prefix_text){
 				chat(chat_msg,e.user_id,_this);
 			}
