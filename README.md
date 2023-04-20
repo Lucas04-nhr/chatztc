@@ -8,10 +8,10 @@ ChatGLM
 
 git clone --depth=1 https://gitee.com/394911284/chatztc.git ./plugins/chatztc/
 
-第 2 步：复制本地配置配置文件
+第 2 步：复制示例配置，生成本地配置文件
 cp ./plugins/chatztc/config/config.json.example ./plugins/chatztc/config/config.json
 
-第 3 步：修改本地配置配置文件的ChatGLM的api的端口地址
+第 3 步：修改本地配置文件的ChatGLM的api的端口地址
 ./plugins/chatztc/config/config.json
 
 "post_url": "http://0.0.0.0:8000",
@@ -63,5 +63,8 @@ cp ./plugins/chatztc/config/config.json.example ./plugins/chatztc/config/config.
 #aidellog
 
 删除聊天历史
+
+
+![输入图片说明](QQ%E5%9B%BE%E7%89%8720230420190857.jpg)
 
 
