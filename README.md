@@ -65,6 +65,12 @@ cp ./plugins/chatztc/config/config.json.example ./plugins/chatztc/config/config.
 删除聊天历史
 
 
+
+下面是实际使用效果：
+
 ![输入图片说明](QQ%E5%9B%BE%E7%89%8720230420190857.jpg)
 
+
+ChatGLM官方项目地址
+https://github.com/THUDM/ChatGLM-6B
 
