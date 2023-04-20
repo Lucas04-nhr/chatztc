@@ -1,5 +1,4 @@
 import plugin from '../../lib/plugins/plugin.js'
-import WebSocket from 'websocket';
 import https from 'http';
 import fs from 'fs';
 import strDiff from './js/str-diff-function.js';
@@ -11,7 +10,6 @@ var ChatGLMConfig = JSON.parse(
   )
 )
 
-//chat.charrobot.com
 
 
 var ChatGLMWebSocket = await (async function(){
@@ -66,26 +64,29 @@ var ChatGLMWebSocket = await (async function(){
 		if(user_data_cache[user_id] && user_data_cache[user_id][key]){
 			return user_data_cache[user_id][key];
 		}
-		var getdatajson = await readfileAsync(`./plugins/example/data/${user_id}.json`);
-		var getdata = JSON.parse(getdatajson);
+		var getdata = {};
+		var getdatajson = await readfileAsync(`./plugins/chatztc/data/${user_id}.json`);
+		if(getdatajson){
+			getdata = JSON.parse(getdatajson);
+		}
 		var data = []
 		if(getdata && getdata[key]){
 			data = getdata[key];
 		}
 		//从磁盘中读取之后写入缓存
-		user_data_cache[user_id] = data;
+		user_data_cache[user_id] = getdata;
 		user_data_cache_delete_function(user_id);
 		return data;
 	};
 	var _set_user_data_by_key = async function(user_id,key,data){
-		var getdatajson = await readfileAsync(`./plugins/example/data/${user_id}.json`);
+		var getdatajson = await readfileAsync(`./plugins/chatztc/data/${user_id}.json`);
 		var getdata = JSON.parse(getdatajson);
 		if(!getdata){
 			getdata = {};
 		}
 		getdata[key] = data;
 		var getdatajson = JSON.stringify(getdata);
-		var ret = await writeFileAsync(`./plugins/example/data/${user_id}.json`,getdatajson);
+		var ret = await writeFileAsync(`./plugins/chatztc/data/${user_id}.json`,getdatajson);
 		return ret;
 	};
 	//延时删除内存缓存的方法
@@ -251,7 +252,7 @@ var ChatGLMWebSocket = await (async function(){
 
 
 
-export class ChatGLM extends plugin {
+export class ChatZTC extends plugin {
 	
   constructor () {
 	  var rule_arr =[];
