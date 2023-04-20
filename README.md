@@ -9,9 +9,6 @@ ChatGLM
 
 git clone --depth=1 https://gitee.com/394911284/chatztc.git ./plugins/chatztc/
 
-然后重启云崽服务
-
-
 第 2 步：复制本地配置配置文件
 cp ./plugins/chatztc/config/config.json.example ./plugins/chatztc/config/config.json
 
@@ -24,6 +21,9 @@ cp ./plugins/chatztc/config/config.json.example ./plugins/chatztc/config/config.
 ./plugins/chatztc/config/config.json
 
 "answer_all_chat": true
+
+第 5 步：
+重启云崽服务
 
 #### 使用说明
 
