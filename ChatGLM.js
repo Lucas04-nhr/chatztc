@@ -433,11 +433,9 @@ export class ChatZTC extends plugin {
 				//logger.info('[用户聊天,没有找到完全匹配的关键词前缀]', key_rate_arr);
 			}
 		}
-		
-		
-		
+
 		//不是#开头的字符串进来了可以直接触发聊天
-		if(e.msg.substr(0,"#".length)!="#"){
+		if(ChatGLMConfig.answer_all_chat){
 			if(!find_str_prefix_text){
 				chat(chat_msg,e.user_id,_this);
 			}
