@@ -1,4 +1,4 @@
-# chatztc
+# ChatGLM的api插件
 
 #### 介绍
 
