@@ -238,7 +238,16 @@ var ChatGLMWebSocket = await (async function(){
 
 	//下面不能加'echo-protocol'，否则会报Can`t connect due to "Sec-WebSocket-Protocol header"的错。因为服务器没有返回对应协议规定的信息
 	//ws.connect(ChatGLMConfig.websocket_url); //, 'echo-protocol');
-	
+	function get_config_text(config_word) {
+		if(!ChatGLMConfig.str_prefix[config_word]){
+			return null;
+		}
+		var public_prefix= '';
+		if(ChatGLMConfig.public_prefix){
+			public_prefix = ChatGLMConfig.public_prefix;
+		}
+		return public_prefix + ChatGLMConfig.str_prefix[config_word].text;
+	}
 	return {
 		setReplyFunc:setReplyFunc,
 		send_msg:send_msg,
@@ -247,6 +256,7 @@ var ChatGLMWebSocket = await (async function(){
 		set_character:set_character,
 		get_character:get_character,
 		del_character:del_character,
+		get_config_text:get_config_text,
 	};
 })();
 
@@ -260,7 +270,7 @@ export class ChatZTC extends plugin {
 	  for(var key in ChatGLMConfig.str_prefix){
 		  rule_arr.push({
           /** 命令正则匹配优先匹配 */
-          reg: '^'+ChatGLMConfig.str_prefix[key].text+'\s*\w*',
+          reg: '^'+ChatGLMWebSocket.get_config_text(key)+'\s*\w*',
           /** 执行方法 */
           fnc: 'get_user_msg'//
         });
@@ -306,7 +316,7 @@ export class ChatZTC extends plugin {
 		function help(chat_msg,user_id,_this){
 			var help_str = "------ai指令列表------";
 			for(var key in ChatGLMConfig.str_prefix){
-				help_str+='\n\n'+ChatGLMConfig.str_prefix[key].text+'\n'+"    "+ChatGLMConfig.str_prefix[key].note;
+				help_str+='\n\n'+ChatGLMWebSocket.get_config_text(key)+'\n'+"    "+ChatGLMConfig.str_prefix[key].note;
 			}
 			_this.reply(help_str);
 		}
@@ -363,9 +373,9 @@ export class ChatZTC extends plugin {
 		var find_str_prefix_text = false;//是否找到了聊天提示词
 		var key_find = null;
 		for(var key in ChatGLMConfig.str_prefix){
-			if(ChatGLMConfig.str_prefix[key].text == e.msg.substr(0,ChatGLMConfig.str_prefix[key].text.length)){
+			if(ChatGLMWebSocket.get_config_text(key) == e.msg.substr(0,ChatGLMWebSocket.get_config_text(key).length)){
 				find_str_prefix_text = true;
-				chat_msg = e.msg.substr(ChatGLMConfig.str_prefix[key].text.length);
+				chat_msg = e.msg.substr(ChatGLMWebSocket.get_config_text(key).length);
 				key_find = key;
 				logger.info('[用户聊天,chat_msg,key]', chat_msg+","+key);
 				break;
@@ -406,13 +416,13 @@ export class ChatZTC extends plugin {
 			}
 		}else{
 			//没有找到完全匹配的关键词前缀，同时是以#开始的字符串
-			if(e.msg.substr(0,"#".length)=="#"){
+			if(e.msg.substr(0,"#".length)=="#" && ChatGLMConfig.automatic_suggestion_order){
 				var key_rate_arr = [];
 				for(var key in ChatGLMConfig.str_prefix){
-					var rate = strDiff.strGetDiffRate(ChatGLMConfig.str_prefix[key].text,e.msg);
+					var rate = strDiff.strGetDiffRate(ChatGLMWebSocket.get_config_text(key),e.msg);
 					key_rate_arr.push({
 						key:key,
-						text:ChatGLMConfig.str_prefix[key].text,
+						text:ChatGLMWebSocket.get_config_text(key),
 						rate:rate,
 					});
 				}

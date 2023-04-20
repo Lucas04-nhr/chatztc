@@ -1,44 +1,45 @@
 {
-	"type": "post",
 	"post_url": "http://0.0.0.0:8000",
 	"history_num": 3,
+	"automatic_suggestion_order": true,
+	"answer_all_chat": true,
+	"public_prefix": "#ai",
 	"str_prefix": {
 		"help": {
-			"text": "#ai帮助",
+			"text": "帮助",
 			"note": "唤出ai帮助"
 		},
 		"chat": {
-			"text": "#ai:",
+			"text": ":",
 			"note": "使用ChatGLM进行聊天,示例:#ai:你好"
 		},
 		"set_history_num": {
-			"text": "#ai设置记忆条数",
+			"text": "设置记忆条数",
 			"note": "用来设置ai保存的历史聊天数量,示例:#ai设置记忆条数3"
 		},
 		"get_history_num": {
-			"text": "#ai获取设置的记忆条数",
+			"text": "获取设置的记忆条数",
 			"note": "用来获取ai保存的历史聊天数量"
 		},
 		"set_character": {
-			"text": "#ai将上次对白设置为人设",
+			"text": "将上次对白设置为人设",
 			"note": "用来设置1条ai始终记得的历史聊天"
 		},
 		"get_character": {
-			"text": "#ai获取人设",
+			"text": "获取人设",
 			"note": "用来获取ai始终记得的历史聊天"
 		},
 		"del_character": {
-			"text": "#ai删除人设",
+			"text": "删除人设",
 			"note": "用来删除ai始终记得的历史聊天"
 		},
 		"get_history": {
-			"text": "#ailog",
+			"text": "log",
 			"note": "输出聊天历史"
 		},
 		"del_history": {
-			"text": "#aidellog",
+			"text": "dellog",
 			"note": "删除聊天历史"
 		}
-	},
-	"answer_all_chat": true
+	}
 }
