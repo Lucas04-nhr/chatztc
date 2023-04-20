@@ -142,15 +142,21 @@ var ChatGLMWebSocket = await (async function(){
 		chat_history = [];
 		return ;
 	}
-	
-	
+
+
 	var post_data = function(data,callback){
 		logger.info('[ChatGLM,POST,send]', data);
+		var urlInfo = new URL(ChatGLMConfig.post_url);
+		//logger.info('[ChatGLM,POST,urlInfo]', urlInfo);
+		var port = urlInfo.port;
+		if(!port){
+			port = 80;
+		}
 		var data_str = JSON.stringify(data);
 		var options = {
-		  hostname: 'chat.charrobot.com',
-		  port: 80,
-		  path: '',
+		  hostname: urlInfo.hostname,
+		  port: port,
+		  path: urlInfo.pathname,
 		  method: 'POST',
 		  headers: {
 			'Content-Type': 'application/json',
