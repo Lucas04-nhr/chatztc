@@ -4,8 +4,7 @@
 ChatGLM
 #### 安装教程
 
-第 1 步：下载插件
-在云崽根目录下打开终端，运行
+第 1 步：在云崽根目录下打开终端，运行
 
 git clone --depth=1 https://gitee.com/394911284/chatztc.git ./plugins/chatztc/
 
