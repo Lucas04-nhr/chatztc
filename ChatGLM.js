@@ -429,7 +429,7 @@ export class ChatZTC extends plugin {
 				key_rate_arr.sort(function(a,b){
 					return b.rate-a.rate;
 				});
-				_this.reply("您想使用的指令是这个吗:'"+key_rate_arr[0].text+"'"+'\n'+"如果需要所有指令及说明，请输入'"+ChatGLMConfig.str_prefix.help.text+"'");
+				_this.reply("您想使用的指令是这个吗:'"+key_rate_arr[0].text+"'"+'\n'+"如果需要所有指令及说明，请输入'"+ChatGLMWebSocket.get_config_text("help")+"'");
 				//logger.info('[用户聊天,没有找到完全匹配的关键词前缀]', key_rate_arr);
 			}
 		}
