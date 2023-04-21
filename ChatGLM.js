@@ -139,7 +139,7 @@ var ChatGLMWebSocket = await (async function(){
 		_set_chat_character(user_id,null);
 		_this.reply("删除人设完成");
 	}
-	var get_history = function(){
+	var get_history = function(chat_msg,user_id,_this){
 		return _get_chat_history(user_id);
 	}
 	var del_history = function(chat_msg,user_id,_this){
@@ -354,7 +354,7 @@ export class ChatZTC extends plugin {
 			ChatGLMWebSocket.del_character(chat_msg,user_id,_this);
 		}
 		function get_history(chat_msg,user_id,_this){
-			_this.reply(JSON.stringify(ChatGLMWebSocket.get_history()));
+			_this.reply(JSON.stringify(ChatGLMWebSocket.get_history(chat_msg,user_id,_this)));
 		}
 		function del_history(chat_msg,user_id,_this){
 			ChatGLMWebSocket.del_history(chat_msg,user_id,_this);
