@@ -54,8 +54,6 @@ var ChatGLMWebSocket = await (async function(){
 	//await writeFileAsync(`./plugins/example/data/${user_id}.json`,"123");
 	//var getdata = await readfileAsync(`./plugins/example/data/${user_id}.json`);
 	//logger.info('[ChatGLM,readfileAsync,getdata]', getdata);
-	var chat_history = [];
-	var chat_character = null;
 	var user_data_cache = {};
 	var user_data_cache_delete_time_out = 1000 * 60 *5;//数据写入缓存之后会延时删除，防止内存爆炸
 	var user_data_cache_delete_handler = {};
@@ -69,7 +67,7 @@ var ChatGLMWebSocket = await (async function(){
 		if(getdatajson){
 			getdata = JSON.parse(getdatajson);
 		}
-		var data = []
+		var data = null;
 		if(getdata && getdata[key]){
 			data = getdata[key];
 		}
@@ -115,15 +113,22 @@ var ChatGLMWebSocket = await (async function(){
 	
 	
 	var set_character = function(chat_msg,user_id,_this){
+		var chat_history = _get_chat_history(user_id);
+		if(!chat_history){
+			chat_history = [];
+		}
 		if(chat_history.length>0){
-			chat_character = chat_history[chat_history.length-1];
+			var chat_character = chat_history[chat_history.length-1];
+			_set_chat_character(user_id,chat_character);
 			chat_history = chat_history.slice(0,chat_history.length-1);//同时删除对白记录的最后一条
+			_set_chat_history(user_id,chat_history);
 			_this.reply("人设设定为对白:"+JSON.stringify(chat_character));
 		}else{
 			_this.reply("还咩有历史对白，请先进行一次对话");
 		}
 	}
 	var get_character = function(chat_msg,user_id,_this){
+		var chat_character = _get_chat_character(user_id);
 		if(chat_character){
 			return chat_character;
 		}else{
@@ -131,16 +136,15 @@ var ChatGLMWebSocket = await (async function(){
 		}
 	}
 	var del_character = function(chat_msg,user_id,_this){
-		chat_character = null;
+		_set_chat_character(user_id,null);
 		_this.reply("删除人设完成");
 	}
 	var get_history = function(){
-		return chat_history;
+		return _get_chat_history(user_id);
 	}
 	var del_history = function(chat_msg,user_id,_this){
-		var num = chat_history.length;
-		_this.reply("清除历史条数:"+num);
-		chat_history = [];
+		_set_chat_history(user_id,[]);
+		_this.reply("清除历史成功");
 		return ;
 	}
 
@@ -164,34 +168,25 @@ var ChatGLMWebSocket = await (async function(){
 			'Content-Length': Buffer.byteLength(data_str)
 		  }
 		}
-		 
 		var req = https.request(options, (res) => {
 		  //logger.info('[ChatGLM,POST,statusCode]',res.statusCode)
 		  //logger.info('[ChatGLM,POST,HEADERS]',res.headers)
-		  
-					  //返回数据流
-			var _data="";
 
+			var _data="";//返回数据流
 			//数据
 			res.on('data', function (chunk) {
 				_data+=chunk;
 				//logger.info('[ChatGLM,POST,retdata]', chunk);
 			});
-
 			// 结束回调
 			res.on('end', function(){
 				logger.info('[ChatGLM,POST,retend]', _data);
 				callback(_data);
 			});
-		  
-		  
-		  
 		})
-		 
 		req.on('error', (error) => {
 		  logger.info('[ChatGLM,POST,error]',error)
 		})
-		 
 		req.write(data_str)
 		req.end();
 	}
@@ -203,11 +198,16 @@ var ChatGLMWebSocket = await (async function(){
     var ws_send_arr = []; 
 		
 	
-    var send_msg = function(msg,callback){
+    var send_msg = function(msg,user_id,callback){
 		//设置ai的历史记忆
 			var history_temp_arr = [];
+			var chat_character = _get_chat_character(user_id);
 			if(chat_character){
 				history_temp_arr.push(chat_character);
+			}
+			var chat_history = _get_chat_history(user_id);
+			if(!chat_history){
+				chat_history = [];
 			}
 			if(chat_history.length<=ChatGLMConfig.history_num){
 				for(var i=0;i<chat_history.length;i++){
@@ -218,11 +218,12 @@ var ChatGLMWebSocket = await (async function(){
 					history_temp_arr.push(chat_history[i]);
 				}
 			}
-			post_data({"prompt": msg, "history": history_temp_arr},function(ret_data){
+			post_data({"prompt": msg, "history": history_temp_arr},async function(ret_data){
 				var ret_obj = JSON.parse(ret_data);
 				if(ret_obj && ret_obj.history){
 					chat_history.push(ret_obj.history[ret_obj.history.length-1]);
 					//logger.info('[ChatGLM,chat_history]', chat_history);
+					await _set_chat_history(user_id,chat_history);
 				}
 				if(ret_obj && ret_obj.response){
 					callback(ret_obj.response);
@@ -322,9 +323,9 @@ export class ChatZTC extends plugin {
 		}
 		//调用ai聊天对话
 		function chat(chat_msg,user_id,_this){
-			ChatGLMWebSocket.setReplyFunc(e.user_id,this);
+			ChatGLMWebSocket.setReplyFunc(user_id,this);
 			//var res = ChatGLMWebSocket.ws_send({"fn_index":0,"data":[null,chat_msg,2048,0.7,0.95,true],"event_data":null,"session_hash":ChatGLMWebSocket.getSessionHash()});
-			ChatGLMWebSocket.send_msg(chat_msg,function(res_msg){
+			ChatGLMWebSocket.send_msg(chat_msg,user_id,function(res_msg){
 				if(res_msg){
 					_this.reply(res_msg);
 				}
