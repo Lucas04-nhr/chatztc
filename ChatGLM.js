@@ -319,6 +319,7 @@ export class ChatZTC extends plugin {
       priority: 5000+10000,//优先级需要调低，因为设置了匹配任何聊天内容
       rule: rule_arr
     })
+
 	  /** 收到用户消息 */
 	  this.get_user_msg = async function(e) {
 		  var _this = this;
@@ -371,14 +372,18 @@ export class ChatZTC extends plugin {
           async function set_character(chat_msg,user_id,_this){
               await ChatGLMWebSocket.set_character(chat_msg,user_id,_this);
           }
-          async function get_character(chat_msg,user_id,_this){
-              _this.reply(JSON.stringify(await ChatGLMWebSocket.get_character(chat_msg,user_id,_this)));
+          async function get_character(chat_msg,user_id,_this,msgInfo){
+				var character = await ChatGLMWebSocket.get_character(chat_msg,user_id,_this);
+			  await _this.forwardMsg( _this, [character],msgInfo);
           }
           async function del_character(chat_msg,user_id,_this){
               await ChatGLMWebSocket.del_character(chat_msg,user_id,_this);
           }
-		async function get_history(chat_msg,user_id,_this){
-			_this.reply(JSON.stringify(await ChatGLMWebSocket.get_history(chat_msg,user_id,_this)));
+		async function get_history(chat_msg,user_id,_this,msgInfo){
+			var history = await ChatGLMWebSocket.get_history(chat_msg,user_id,_this);
+			logger.info('get_history,', history);//
+			await _this.forwardMsg( _this,history,msgInfo );
+			//_this.reply(JSON.stringify(await ChatGLMWebSocket.get_history(chat_msg,user_id,_this)));
 		}
 		async function del_history(chat_msg,user_id,_this){
             await await ChatGLMWebSocket.del_history(chat_msg,user_id,_this);
@@ -425,13 +430,13 @@ export class ChatZTC extends plugin {
                         await set_character(chat_msg,e.user_id,_this);
 						break;
 					case "get_character":
-                        await get_character(chat_msg,e.user_id,_this);
+                        await get_character(chat_msg,e.user_id,_this,e);
 						break;
 					case "del_character":
                         await del_character(chat_msg,e.user_id,_this);
 						break;
 					case "get_history":
-						await get_history(chat_msg,e.user_id,_this);
+						await get_history(chat_msg,e.user_id,_this,e);
 						break;
 					case "del_history":
                         await del_history(chat_msg,e.user_id,_this);
@@ -467,6 +472,37 @@ export class ChatZTC extends plugin {
 		}
 	  };
   }
+	/**
+	 * 折合消息
+	 */
+	makeMsg = ({ data,msgInfo }) => {
+		const msgList = []
+		for (let item of data) {
+			msgList.push({
+				message: item[0],
+				/*我的昵称*/
+				nickname: msgInfo.nickname,
+				/*我的账号*/
+				user_id: msgInfo.user_id,
+			})
+			msgList.push({
+				message: item[1],
+				/*我的昵称*/
+				nickname: Bot.nickname,
+				/*我的账号*/
+				user_id: Bot.uin,
+			})
+		}
+		return msgList
+	}
+	/**
+	 * @returns
+	 */
+	forwardMsg = async ( e, data,msgInfo ) => {
+		/*制作合并转发消息以备发送*/
+		await e.reply(await Bot.makeForwardMsg(this.makeMsg({ data,msgInfo })))
+		return
+	}
 }
 
 
