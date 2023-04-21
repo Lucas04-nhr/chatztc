@@ -374,7 +374,7 @@ export class ChatZTC extends plugin {
           }
           async function get_character(chat_msg,user_id,_this,msgInfo){
 				var character = await ChatGLMWebSocket.get_character(chat_msg,user_id,_this);
-			  await _this.forwardMsg( _this,history,[character],msgInfo);
+			  await _this.forwardMsg( _this, [character],msgInfo);
           }
           async function del_character(chat_msg,user_id,_this){
               await ChatGLMWebSocket.del_character(chat_msg,user_id,_this);
