@@ -372,8 +372,9 @@ export class ChatZTC extends plugin {
           async function set_character(chat_msg,user_id,_this){
               await ChatGLMWebSocket.set_character(chat_msg,user_id,_this);
           }
-          async function get_character(chat_msg,user_id,_this){
-              _this.reply(JSON.stringify(await ChatGLMWebSocket.get_character(chat_msg,user_id,_this)));
+          async function get_character(chat_msg,user_id,_this,msgInfo){
+				var character = await ChatGLMWebSocket.get_character(chat_msg,user_id,_this);
+			  await _this.forwardMsg( _this,history,[character],msgInfo);
           }
           async function del_character(chat_msg,user_id,_this){
               await ChatGLMWebSocket.del_character(chat_msg,user_id,_this);
@@ -429,7 +430,7 @@ export class ChatZTC extends plugin {
                         await set_character(chat_msg,e.user_id,_this);
 						break;
 					case "get_character":
-                        await get_character(chat_msg,e.user_id,_this);
+                        await get_character(chat_msg,e.user_id,_this,e);
 						break;
 					case "del_character":
                         await del_character(chat_msg,e.user_id,_this);
