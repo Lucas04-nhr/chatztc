@@ -491,6 +491,8 @@ export class ChatZTC extends plugin {
 	 * @returns
 	 */
 	forwardMsg = async ({ e, data }) => {
+		logger.info('[forwardMsg,e]', e);
+		logger.info('[forwardMsg,data]', data);
 		if (data.length == 1) {
 			await e.reply(data[0])
 			return
