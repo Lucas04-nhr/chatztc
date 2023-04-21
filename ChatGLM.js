@@ -319,7 +319,7 @@ export class ChatZTC extends plugin {
       priority: 5000+10000,//优先级需要调低，因为设置了匹配任何聊天内容
       rule: rule_arr
     })
-	  var _ChatZTC_this = this;
+
 	  /** 收到用户消息 */
 	  this.get_user_msg = async function(e) {
 		  var _this = this;
@@ -381,7 +381,7 @@ export class ChatZTC extends plugin {
 		async function get_history(chat_msg,user_id,_this){
 			var history = await ChatGLMWebSocket.get_history(chat_msg,user_id,_this);
 			logger.info('get_history,', history);//
-			await _ChatZTC_this.forwardMsg({ _this,history });
+			await ChatZTC.forwardMsg({ _this,history });
 			//_this.reply(JSON.stringify(await ChatGLMWebSocket.get_history(chat_msg,user_id,_this)));
 		}
 		async function del_history(chat_msg,user_id,_this){
