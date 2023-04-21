@@ -499,12 +499,6 @@ export class ChatZTC extends plugin {
 	 * @returns
 	 */
 	forwardMsg = async ( e, data,msgInfo ) => {
-		logger.info('[forwardMsg,e]', e);
-		logger.info('[forwardMsg,data]', data);
-		if (data.length == 1) {
-			await e.reply(data[0])
-			return
-		}
 		/*制作合并转发消息以备发送*/
 		await e.reply(await Bot.makeForwardMsg(this.makeMsg({ data,msgInfo })))
 		return
