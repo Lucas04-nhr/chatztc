@@ -378,10 +378,10 @@ export class ChatZTC extends plugin {
           async function del_character(chat_msg,user_id,_this){
               await ChatGLMWebSocket.del_character(chat_msg,user_id,_this);
           }
-		async function get_history(chat_msg,user_id,_this){
+		async function get_history(chat_msg,user_id,_this,msgInfo){
 			var history = await ChatGLMWebSocket.get_history(chat_msg,user_id,_this);
 			logger.info('get_history,', history);//
-			await _this.forwardMsg( _this,history );
+			await _this.forwardMsg( _this,history,msgInfo );
 			//_this.reply(JSON.stringify(await ChatGLMWebSocket.get_history(chat_msg,user_id,_this)));
 		}
 		async function del_history(chat_msg,user_id,_this){
@@ -435,7 +435,7 @@ export class ChatZTC extends plugin {
                         await del_character(chat_msg,e.user_id,_this);
 						break;
 					case "get_history":
-						await get_history(chat_msg,e.user_id,_this);
+						await get_history(chat_msg,e.user_id,_this,e);
 						break;
 					case "del_history":
                         await del_history(chat_msg,e.user_id,_this);
@@ -474,11 +474,18 @@ export class ChatZTC extends plugin {
 	/**
 	 * 折合消息
 	 */
-	makeMsg = ({ data }) => {
+	makeMsg = ({ data,msgInfo }) => {
 		const msgList = []
 		for (let item of data) {
 			msgList.push({
-				message: item,
+				message: item[0],
+				/*我的昵称*/
+				nickname: msgInfo.nickname,
+				/*我的账号*/
+				user_id: msgInfo.user_id,
+			})
+			msgList.push({
+				message: item[1],
 				/*我的昵称*/
 				nickname: Bot.nickname,
 				/*我的账号*/
@@ -490,7 +497,7 @@ export class ChatZTC extends plugin {
 	/**
 	 * @returns
 	 */
-	forwardMsg = async ( e, data ) => {
+	forwardMsg = async ( e, data,msgInfo ) => {
 		logger.info('[forwardMsg,e]', e);
 		logger.info('[forwardMsg,data]', data);
 		if (data.length == 1) {
@@ -498,7 +505,7 @@ export class ChatZTC extends plugin {
 			return
 		}
 		/*制作合并转发消息以备发送*/
-		await e.reply(await Bot.makeForwardMsg(this.makeMsg({ data })))
+		await e.reply(await Bot.makeForwardMsg(this.makeMsg({ data,msgInfo })))
 		return
 	}
 }
