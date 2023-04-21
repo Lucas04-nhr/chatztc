@@ -378,7 +378,8 @@ export class ChatZTC extends plugin {
               await ChatGLMWebSocket.del_character(chat_msg,user_id,_this);
           }
 		async function get_history(chat_msg,user_id,_this){
-			_this.reply(JSON.stringify(await ChatGLMWebSocket.get_history(chat_msg,user_id,_this)));
+			_this.forwardMsg(_this,await ChatGLMWebSocket.get_history(chat_msg,user_id,_this));
+			//_this.reply(JSON.stringify(await ChatGLMWebSocket.get_history(chat_msg,user_id,_this)));
 		}
 		async function del_history(chat_msg,user_id,_this){
             await await ChatGLMWebSocket.del_history(chat_msg,user_id,_this);
@@ -467,6 +468,35 @@ export class ChatZTC extends plugin {
 		}
 	  };
   }
+	/**
+	 * 折合消息
+	 */
+	makeMsg = ({ data }) => {
+		const msgList = []
+		for (let item of data) {
+			msgList.push({
+				message: item,
+				/*我的昵称*/
+				nickname: Bot.nickname,
+				/*我的账号*/
+				user_id: Bot.uin,
+			})
+		}
+		return msgList
+	}
+	/**
+	 * @param { e, data } param0
+	 * @returns
+	 */
+	forwardMsg = async ({ e, data }) => {
+		if (data.length == 1) {
+			await e.reply(data[0])
+			return
+		}
+		/*制作合并转发消息以备发送*/
+		await e.reply(await Bot.makeForwardMsg(this.makeMsg({ data })))
+		return
+	}
 }
 
 
