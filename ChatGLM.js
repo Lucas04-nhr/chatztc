@@ -96,6 +96,8 @@ var ChatGLMWebSocket = await (async function(){
 		getdata[key] = data;
 		var getdatajson = JSON.stringify(getdata);
 		var ret = await writeFileAsync(`./plugins/chatztc/data/${user_id}.json`,getdatajson);
+        //从磁盘中读取之后写入缓存(不写读取时可能会读到旧的缓存)
+        user_data_cache[user_id] = getdata;
 		return ret;
 	};
 	//延时删除内存缓存的方法
