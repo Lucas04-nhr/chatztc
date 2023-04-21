@@ -86,8 +86,8 @@ var ChatGLMWebSocket = await (async function(){
 	var _set_user_data_by_key = async function(user_id,key,data){
         var getdata = null;
         //缓存当中有数据则从缓存读取
-        if(user_data_cache[user_id] && user_data_cache[user_id][key]){
-            getdata = user_data_cache[user_id][key];
+        if(user_data_cache[user_id]){
+            getdata = user_data_cache[user_id];
         }else{
             var getdatajson = null;
             try {
