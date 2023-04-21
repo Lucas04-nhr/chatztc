@@ -62,8 +62,12 @@ var ChatGLMWebSocket = await (async function(){
 		if(user_data_cache[user_id] && user_data_cache[user_id][key]){
 			return user_data_cache[user_id][key];
 		}
-		var getdata = {};
-		var getdatajson = await readfileAsync(`./plugins/chatztc/data/${user_id}.json`);
+		var getdatajson = null;
+		try {
+			getdatajson = await readfileAsync(`./plugins/chatztc/data/${user_id}.json`);
+		} catch (error) {
+		}
+		var getdata = null;
 		if(getdatajson){
 			getdata = JSON.parse(getdatajson);
 		}
@@ -77,8 +81,15 @@ var ChatGLMWebSocket = await (async function(){
 		return data;
 	};
 	var _set_user_data_by_key = async function(user_id,key,data){
-		var getdatajson = await readfileAsync(`./plugins/chatztc/data/${user_id}.json`);
-		var getdata = JSON.parse(getdatajson);
+		var getdatajson = null;
+		try {
+			getdatajson = await readfileAsync(`./plugins/chatztc/data/${user_id}.json`);
+		} catch (error) {
+		}
+		var getdata = null;
+		if(getdatajson){
+			getdata = JSON.parse(getdatajson);
+		}
 		if(!getdata){
 			getdata = {};
 		}
