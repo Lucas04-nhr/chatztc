@@ -81,15 +81,20 @@ var ChatGLMWebSocket = await (async function(){
 		return data;
 	};
 	var _set_user_data_by_key = async function(user_id,key,data){
-		var getdatajson = null;
-		try {
-			getdatajson = await readfileAsync(`./plugins/chatztc/data/${user_id}.json`);
-		} catch (error) {
-		}
-		var getdata = null;
-		if(getdatajson){
-			getdata = JSON.parse(getdatajson);
-		}
+        var getdata = null;
+        //缓存当中有数据则从缓存读取
+        if(user_data_cache[user_id] && user_data_cache[user_id][key]){
+            getdata = user_data_cache[user_id][key];
+        }else{
+            var getdatajson = null;
+            try {
+                getdatajson = await readfileAsync(`./plugins/chatztc/data/${user_id}.json`);
+            } catch (error) {
+            }
+            if(getdatajson){
+                getdata = JSON.parse(getdatajson);
+            }
+        }
 		if(!getdata){
 			getdata = {};
 		}
@@ -132,9 +137,9 @@ var ChatGLMWebSocket = await (async function(){
 		}
 		if(chat_history.length>0){
 			var chat_character = chat_history[chat_history.length-1];
-			_set_chat_character(user_id,chat_character);
+            await _set_chat_character(user_id,chat_character);
 			chat_history = chat_history.slice(0,chat_history.length-1);//同时删除对白记录的最后一条
-			_set_chat_history(user_id,chat_history);
+            await _set_chat_history(user_id,chat_history);
 			_this.reply("人设设定为对白:"+JSON.stringify(chat_character));
 		}else{
 			_this.reply("还咩有历史对白，请先进行一次对话");
