@@ -51,9 +51,9 @@ cp ./plugins/chatztc/config/config.json.example ./plugins/chatztc/config/config.
 
 用来获取ai保存的历史聊天数量
 
-#ai将上次对白设置为人设
+#ai设置人设
 
-用来设置1条ai始终记得的历史聊天
+将上次对白设置为人设，会将上次的对白添加在历史聊天的顶部
 
 #ai获取人设
 
