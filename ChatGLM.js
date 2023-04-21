@@ -380,7 +380,7 @@ export class ChatZTC extends plugin {
 		async function get_history(chat_msg,user_id,_this){
 			var history = await ChatGLMWebSocket.get_history(chat_msg,user_id,_this);
 			logger.info('get_history,', history);//
-			_this.forwardMsg(_this,history);
+			_this.forwardMsg({ _this,history });
 			//_this.reply(JSON.stringify(await ChatGLMWebSocket.get_history(chat_msg,user_id,_this)));
 		}
 		async function del_history(chat_msg,user_id,_this){
