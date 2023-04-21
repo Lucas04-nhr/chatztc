@@ -146,9 +146,9 @@ var ChatGLMWebSocket = await (async function(){
             await _set_chat_character(user_id,chat_character);
 			chat_history = chat_history.slice(0,chat_history.length-1);//同时删除对白记录的最后一条
             await _set_chat_history(user_id,chat_history);
-			_this.reply("人设设定为对白:"+JSON.stringify(chat_character));
+			_this.reply("人设设置成功");
 		}else{
-			_this.reply("还咩有历史对白，请先进行一次对话");
+			_this.reply("还没有历史对白，请先进行一次对话");
 		}
 	}
 	var get_character = async function(chat_msg,user_id,_this){
@@ -156,7 +156,7 @@ var ChatGLMWebSocket = await (async function(){
 		if(chat_character){
 			return chat_character;
 		}else{
-			_this.reply("还咩有设置人设，请先设置人设");
+			_this.reply("还没有设置人设，请先设置人设");
 		}
 	}
 	var del_character = async function(chat_msg,user_id,_this){
