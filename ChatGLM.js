@@ -69,7 +69,10 @@ var ChatGLMWebSocket = await (async function(){
 		}
 		var getdata = null;
 		if(getdatajson){
-			getdata = JSON.parse(getdatajson);
+			try {
+				getdata = JSON.parse(getdatajson);
+			} catch (error) {
+			}
 		}
 		var data = null;
 		if(getdata && getdata[key]){
@@ -92,7 +95,10 @@ var ChatGLMWebSocket = await (async function(){
             } catch (error) {
             }
             if(getdatajson){
-                getdata = JSON.parse(getdatajson);
+				try {
+					getdata = JSON.parse(getdatajson);
+				} catch (error) {
+				}
             }
         }
 		if(!getdata){
