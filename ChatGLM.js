@@ -307,7 +307,7 @@ export class ChatZTC extends plugin {
       rule: rule_arr
     })
 	  /** 收到用户消息 */
-	  this.get_user_msg = function(e) {
+	  this.get_user_msg = async function(e) {
 		  var _this = this;
 		logger.info('[用户命令]', e.msg);
 		//this.reply("用户发送的内容为:"+e.msg)
@@ -365,8 +365,8 @@ export class ChatZTC extends plugin {
 		function del_character(chat_msg,user_id,_this){
 			ChatGLMWebSocket.del_character(chat_msg,user_id,_this);
 		}
-		function get_history(chat_msg,user_id,_this){
-			_this.reply(JSON.stringify(ChatGLMWebSocket.get_history(chat_msg,user_id,_this)));
+		async function get_history(chat_msg,user_id,_this){
+			_this.reply(JSON.stringify(await ChatGLMWebSocket.get_history(chat_msg,user_id,_this)));
 		}
 		function del_history(chat_msg,user_id,_this){
 			ChatGLMWebSocket.del_history(chat_msg,user_id,_this);
@@ -419,7 +419,7 @@ export class ChatZTC extends plugin {
 						del_character(chat_msg,e.user_id,_this);
 						break;
 					case "get_history":
-						get_history(chat_msg,e.user_id,_this);
+						await get_history(chat_msg,e.user_id,_this);
 						break;
 					case "del_history":
 						del_history(chat_msg,e.user_id,_this);
