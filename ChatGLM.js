@@ -381,7 +381,7 @@ export class ChatZTC extends plugin {
 		async function get_history(chat_msg,user_id,_this){
 			var history = await ChatGLMWebSocket.get_history(chat_msg,user_id,_this);
 			logger.info('get_history,', history);//
-			await ChatZTC.forwardMsg({ _this,history });
+			await _this.forwardMsg({ _this,history });
 			//_this.reply(JSON.stringify(await ChatGLMWebSocket.get_history(chat_msg,user_id,_this)));
 		}
 		async function del_history(chat_msg,user_id,_this){
@@ -492,6 +492,7 @@ export class ChatZTC extends plugin {
 	 * @returns
 	 */
 	forwardMsg = async ({ e, data }) => {
+		logger.info('[forwardMsg,arguments]', arguments);
 		logger.info('[forwardMsg,e]', e);
 		logger.info('[forwardMsg,data]', data);
 		if (data.length == 1) {
