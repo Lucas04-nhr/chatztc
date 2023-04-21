@@ -112,8 +112,8 @@ var ChatGLMWebSocket = await (async function(){
 	
 	
 	
-	var set_character = function(chat_msg,user_id,_this){
-		var chat_history = _get_chat_history(user_id);
+	var set_character = async function(chat_msg,user_id,_this){
+		var chat_history = await _get_chat_history(user_id);
 		if(!chat_history){
 			chat_history = [];
 		}
@@ -127,8 +127,8 @@ var ChatGLMWebSocket = await (async function(){
 			_this.reply("还咩有历史对白，请先进行一次对话");
 		}
 	}
-	var get_character = function(chat_msg,user_id,_this){
-		var chat_character = _get_chat_character(user_id);
+	var get_character = async function(chat_msg,user_id,_this){
+		var chat_character = await _get_chat_character(user_id);
 		if(chat_character){
 			return chat_character;
 		}else{
@@ -139,8 +139,8 @@ var ChatGLMWebSocket = await (async function(){
 		_set_chat_character(user_id,null);
 		_this.reply("删除人设完成");
 	}
-	var get_history = function(chat_msg,user_id,_this){
-		return _get_chat_history(user_id);
+	var get_history = async function(chat_msg,user_id,_this){
+		return await _get_chat_history(user_id);
 	}
 	var del_history = function(chat_msg,user_id,_this){
 		_set_chat_history(user_id,[]);
@@ -198,14 +198,15 @@ var ChatGLMWebSocket = await (async function(){
     var ws_send_arr = []; 
 		
 	
-    var send_msg = function(msg,user_id,callback){
+    var send_msg = async function(msg,user_id,callback){
 		//设置ai的历史记忆
 			var history_temp_arr = [];
-			var chat_character = _get_chat_character(user_id);
+			var chat_character = await _get_chat_character(user_id);
+			logger.info('[ChatGLM,send_msg，chat_character]', chat_character);
 			if(chat_character){
 				history_temp_arr.push(chat_character);
 			}
-			var chat_history = _get_chat_history(user_id);
+			var chat_history = await _get_chat_history(user_id);
 			if(!chat_history){
 				chat_history = [];
 			}
