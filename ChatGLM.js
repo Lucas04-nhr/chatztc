@@ -191,7 +191,7 @@ var ChatGLMWebSocket = await (async function(){
     var set_history_num = async function(history_num,user_id,_this){
         ChatGLMConfig.history_num = history_num;
         await setChatGLMConfig(ChatGLMConfig);
-        _this.reply("历史条数设置成功");
+		_this.reply("设置成功，当前记忆条数:"+ChatGLMConfig.history_num);
     }
 
 	var post_data = function(data,callback){
@@ -379,11 +379,11 @@ export class ChatZTC extends plugin {
 				}
 			});
 		}
-		
-		function set_history_num(chat_msg,user_id,_this){
+
+		async function set_history_num(chat_msg,user_id,_this){
 			if(isNumber(chat_msg)){
-				ChatGLMConfig.history_num=parseInt(chat_msg);
-				_this.reply("设置成功，当前记忆条数:"+ChatGLMConfig.history_num);
+				chat_msg=parseInt(chat_msg);
+				await ChatGLMWebSocket.set_history_num(chat_msg,user_id,_this);
 			}else{
 				_this.reply("末尾请输入数字，示例:#ai设置记忆条数3");
 			}
@@ -443,7 +443,7 @@ export class ChatZTC extends plugin {
 						chat(chat_msg,e.user_id,_this);
 						break;
 					case "set_history_num":
-						set_history_num(chat_msg,e.user_id,_this);
+						await set_history_num(chat_msg,e.user_id,_this);
 						break;
 					case "get_history_num":
 						get_history_num(chat_msg,e.user_id,_this);
