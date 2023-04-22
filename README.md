@@ -28,6 +28,11 @@ git clone --depth=1 https://gitee.com/394911284/chatztc.git ./plugins/chatztc/
 	"public_prefix": "#ai",//公共的指令头（和其他插件指令冲突时修改，或者改为自己觉得方便的指令头）
 
 
+备注：更新项目代码方式为，进入项目目录，输入git pull指令
+
+        cd ./plugins/chatztc/
+        git pull
+
 
 #### qq聊天界面使用说明
 
