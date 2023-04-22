@@ -19,7 +19,8 @@ git clone --depth=1 https://gitee.com/394911284/chatztc.git ./plugins/chatztc/
     #ai设置接口地址http://0.0.0.0:8000
 
 第 4 步：（可选）手动进入目录修改可选一些配置文件，配置完需要重启云崽服务
-./plugins/chatztc/config/config.json
+
+	./plugins/chatztc/config/config.json
 
 	"history_num": 3,//用来设置ai保存的历史聊天数量,数量太多可能会爆显存（设置了人设会额外发送一条在最前面）
 	"automatic_suggestion_order": true,//当指令不正确时，是否进行建议
