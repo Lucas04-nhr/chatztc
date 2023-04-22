@@ -375,13 +375,9 @@ export class ChatZTC extends plugin {
 			}
 		}
 		  logger.info('[用户信息]', e);//user_id 用户qq号
+		  logger.info('[用户信息，isMaster]', e.isMaster);//user_id 用户qq号
 		  function isMaster(e){
-
-			  if(regPos.test(val) ){
-				  return true;
-			  }else{
-				  return false;
-			  }
+			  return e.isMaster;
 		  }
 		//用户帮助
 		function help(chat_msg,user_id,_this){
