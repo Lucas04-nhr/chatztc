@@ -374,6 +374,15 @@ export class ChatZTC extends plugin {
 				return false;
 			}
 		}
+		  logger.info('[用户信息]', e);//user_id 用户qq号
+		  function isMaster(e){
+
+			  if(regPos.test(val) ){
+				  return true;
+			  }else{
+				  return false;
+			  }
+		  }
 		//用户帮助
 		function help(chat_msg,user_id,_this){
 			var help_str = "------ai指令列表------";
