@@ -78,27 +78,36 @@ cp ./plugins/chatztc/config/config.json.example ./plugins/chatztc/config/config.
 ![输入图片说明](QQ%E5%9B%BE%E7%89%8720230420190857.jpg)
 
 
-ChatGLM官方项目地址
-https://github.com/THUDM/ChatGLM-6B
+
+ChatGLM秋叶大神的整合包在这里
+https://www.bilibili.com/video/BV1E24y1u7Go/?spm_id_from=333.999.0.0&vd_source=69701cb5cfa769975f4fcee38b58440f
 
 
 
 int4量化模型下载(能优化显存为6G，8G显存的显卡能快速运行)
-chatglm-6b-int4
+
 
 链接：https://pan.baidu.com/s/1izUy6i7XsaSwu9xLTgrufA 
 提取码：kg3g
 
-下载后放到这个目录下
+下载后放到秋叶大神的整合包的这个目录下
 ChatGLM-webui\model\chatglm-6b-int4
 
 
-api.py下载
-链接：https://pan.baidu.com/s/1Nh9AOVmKmh18hVYXum61mQ 
-提取码：663t
+api.py和启动的bat下载，放在ChatGLM-webui根目录
+链接：https://pan.baidu.com/s/1uOkhGRt3ZF00nDZxrsQ6Tw 
+提取码：64jt
 
 
 如果是官方项目下载的api.py，就修改53，54行，就和我上传的文件一样了:
-    tokenizer = AutoTokenizer.from_pretrained("./model/chatglm-6b-int4", trust_remote_code=True)
-    model = AutoModel.from_pretrained("./model/chatglm-6b-int4", trust_remote_code=True).half().cuda()
+
+	tokenizer = AutoTokenizer.from_pretrained("./model/chatglm-6b-int4", trust_remote_code=True)
+	model = AutoModel.from_pretrained("./model/chatglm-6b-int4", trust_remote_code=True).half().cuda()
+
+
+
+
+最后，ChatGLM官方项目地址
+https://github.com/THUDM/ChatGLM-6B
+
 
