@@ -48,10 +48,13 @@ var ChatGLMWebSocket = await (async function(){
 		})
 	}
 
-	var getChatGLMConfig = async function(){
+	var getChatGLMConfig = async function(path){
+		if(!path){
+			path = './config/config.json';
+		}
 		var config = null;
 		try {
-			config = JSON.parse(await fs.promises.readFile(new URL('./config/config.json', import.meta.url)));
+			config = JSON.parse(await fs.promises.readFile(new URL(path, import.meta.url)));
 		} catch (error) {
 		}
 		return config;
@@ -62,7 +65,11 @@ var ChatGLMWebSocket = await (async function(){
 	};
 
 	ChatGLMConfig = await getChatGLMConfig();
-
+	//如果没有配置则读取示例配置
+	if(!ChatGLMConfig){
+		ChatGLMConfig = await getChatGLMConfig('./config/config.json.example');
+		await setChatGLMConfig(ChatGLMConfig);
+	}
 
 
 
@@ -120,7 +127,7 @@ var ChatGLMWebSocket = await (async function(){
 			getdata = {};
 		}
 		getdata[key] = data;
-		var getdatajson = JSON.stringify(getdata);
+		var getdatajson = JSON.stringify(getdata,null,"\t");
 		var ret = await writeFileAsync(basePath+`/data/${user_id}.json`,getdatajson);
         //从磁盘中读取之后写入缓存(不写读取时可能会读到旧的缓存)
         user_data_cache[user_id] = getdata;
@@ -193,6 +200,11 @@ var ChatGLMWebSocket = await (async function(){
         await setChatGLMConfig(ChatGLMConfig);
 		_this.reply("设置成功，当前记忆条数:"+ChatGLMConfig.history_num);
     }
+	var set_post_url = async function(post_url,user_id,_this){
+		ChatGLMConfig.post_url = post_url;
+		await setChatGLMConfig(ChatGLMConfig);
+		_this.reply("设置成功，当前接口地址:"+ChatGLMConfig.post_url);
+	}
 
 	var post_data = function(data,callback){
 		logger.info('[ChatGLM,POST,send]', data);
@@ -305,6 +317,7 @@ var ChatGLMWebSocket = await (async function(){
 		del_character:del_character,
 		get_config_text:get_config_text,
         set_history_num:set_history_num,
+		set_post_url:set_post_url,
 	};
 })();
 
@@ -385,12 +398,22 @@ export class ChatZTC extends plugin {
 				chat_msg=parseInt(chat_msg);
 				await ChatGLMWebSocket.set_history_num(chat_msg,user_id,_this);
 			}else{
-				_this.reply("末尾请输入数字，示例:#ai设置记忆条数3");
+				_this.reply("末尾请输入数字，示例:"+ChatGLMWebSocket.get_config_text("set_history_num")+"3");
 			}
 		}
 		function get_history_num(chat_msg,user_id,_this){
 			_this.reply("当前记忆条数:"+ChatGLMConfig.history_num);
 		}
+		  async function set_post_url(chat_msg,user_id,_this){
+			  if(chat_msg){
+				  await ChatGLMWebSocket.set_post_url(chat_msg,user_id,_this);
+			  }else{
+				  _this.reply("末尾请输入接口地址，示例:"+ChatGLMWebSocket.get_config_text("set_post_url")+"http://0.0.0.0:8000");
+			  }
+		  }
+		  function get_post_url(chat_msg,user_id,_this){
+			  _this.reply("当前接口地址:"+ChatGLMConfig.post_url);
+		  }
           async function set_character(chat_msg,user_id,_this){
               await ChatGLMWebSocket.set_character(chat_msg,user_id,_this);
           }
@@ -447,6 +470,12 @@ export class ChatZTC extends plugin {
 						break;
 					case "get_history_num":
 						get_history_num(chat_msg,e.user_id,_this);
+						break;
+					case "set_post_url":
+						await set_post_url(chat_msg,e.user_id,_this);
+						break;
+					case "get_post_url":
+						get_post_url(chat_msg,e.user_id,_this);
 						break;
 					case "set_character":
                         await set_character(chat_msg,e.user_id,_this);

@@ -13,6 +13,14 @@
 			"text": ":",
 			"note": "使用ChatGLM进行聊天,示例:#ai:你好"
 		},
+		"set_post_url": {
+			"text": "设置接口地址",
+			"note": "用来设置api接口地址"
+		},
+		"get_post_url": {
+			"text": "读取接口地址",
+			"note": "用来查看api接口地址"
+		},
 		"set_history_num": {
 			"text": "设置记忆条数",
 			"note": "用来设置ai保存的历史聊天数量,示例:#ai设置记忆条数3"
