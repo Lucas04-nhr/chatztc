@@ -10,16 +10,15 @@
 
 git clone --depth=1 https://gitee.com/394911284/chatztc.git ./plugins/chatztc/
 
-第 2 步：复制示例配置，生成本地配置文件
+第 2 步：
+重启云崽服务
 
-cp ./plugins/chatztc/config/config.json.example ./plugins/chatztc/config/config.json
+第 3 步：
+配置接口地址，在qq聊天界面使用下面的命令进行设置
 
-第 3 步：修改本地配置文件的ChatGLM的api的端口地址
-./plugins/chatztc/config/config.json
+    #ai设置接口地址http://0.0.0.0:8000
 
-    "post_url": "http://0.0.0.0:8000",
-
-第 4 步：（可选）修改可选配置文件，
+第 4 步：（可选）手动进入目录修改可选一些配置文件，
 ./plugins/chatztc/config/config.json
 
 	"history_num": 3,//用来设置ai保存的历史聊天数量,数量太多可能会爆显存（设置了人设会额外发送一条在最前面）
@@ -28,48 +27,43 @@ cp ./plugins/chatztc/config/config.json.example ./plugins/chatztc/config/config.
 	"public_prefix": "#ai",//公共的指令头（和其他插件指令冲突时修改，或者改为自己觉得方便的指令头）
 
 
-第 5 步：
-重启云崽服务
 
-#### 使用说明
+#### qq聊天界面使用说明
 
-------ai指令列表------
+    ------ai指令列表------
+    
+    #ai帮助
+        唤出ai帮助
 
-#ai帮助
-
-唤出ai帮助
-
-#ai:
-
-使用ChatGLM进行聊天,示例:#ai:你好
-
-#ai设置记忆条数
-
-用来设置ai保存的历史聊天数量,数量太多可能会爆显存。示例:#ai设置记忆条数3
-
-#ai获取设置的记忆条数
-
-用来获取ai保存的历史聊天数量
-
-#ai将上次对白设置为人设
-
-用来设置1条ai始终记得的历史聊天
-
-#ai获取人设
-
-用来获取ai始终记得的历史聊天
-
-#ai删除人设
-
-用来删除ai始终记得的历史聊天
-
-#ailog
-
-输出聊天历史
-
-#aidellog
-
-删除聊天历史
+    #ai:
+        使用ChatGLM进行聊天,示例:#ai:你好
+    
+    #ai设置接口地址
+        用来设置api接口地址
+    
+    #ai读取接口地址
+        用来查看api接口地址
+    
+    #ai设置记忆条数
+        用来设置ai保存的历史聊天数量,示例:#ai设置记忆条数3
+    
+    #ai获取设置的记忆条数
+        用来获取ai保存的历史聊天数量
+    
+    #ai设置人设
+        将上次对白设置为人设，会将上次的对白添加在历史聊天的顶部
+    
+    #ai获取人设
+        用来获取ai始终记得的历史聊天
+    
+    #ai删除人设
+        用来删除ai始终记得的历史聊天
+    
+    #ailog
+        输出聊天历史
+    
+    #aidellog
+        删除聊天历史
 
 
 
