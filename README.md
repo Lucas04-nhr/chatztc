@@ -86,8 +86,8 @@ https://github.com/THUDM/ChatGLM-6B
 int4量化模型下载(能优化显存为6G，8G显存的显卡能快速运行)
 chatglm-6b-int4
 
-链接：https://pan.baidu.com/s/1xxtWbXSOI5jGRNiwtk2Jvg 
-提取码：8zro
+链接：https://pan.baidu.com/s/1izUy6i7XsaSwu9xLTgrufA 
+提取码：kg3g
 
 下载后放到这个目录下
 ChatGLM-webui\model\chatglm-6b-int4
