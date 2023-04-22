@@ -81,3 +81,24 @@ cp ./plugins/chatztc/config/config.json.example ./plugins/chatztc/config/config.
 ChatGLM官方项目地址
 https://github.com/THUDM/ChatGLM-6B
 
+
+
+int4量化模型下载(能优化显存为6G，8G显存的显卡能快速运行)
+chatglm-6b-int4
+
+链接：https://pan.baidu.com/s/1xxtWbXSOI5jGRNiwtk2Jvg 
+提取码：8zro
+
+下载后放到这个目录下
+ChatGLM-webui\model\chatglm-6b-int4
+
+
+api.py下载
+链接：https://pan.baidu.com/s/1Nh9AOVmKmh18hVYXum61mQ 
+提取码：663t
+
+
+如果是官方项目下载的api.py，就修改53，54行，就和我上传的文件一样了:
+    tokenizer = AutoTokenizer.from_pretrained("./model/chatglm-6b-int4", trust_remote_code=True)
+    model = AutoModel.from_pretrained("./model/chatglm-6b-int4", trust_remote_code=True).half().cuda()
+
