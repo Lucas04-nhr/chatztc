@@ -4,15 +4,12 @@ import fs from 'fs';
 import strDiff from './js/str-diff-function.js';
 
 
-var ChatGLMConfig = JSON.parse(
-  await fs.promises.readFile(
-    new URL('./config/config.json', import.meta.url)
-  )
-)
+var ChatGLMConfig;
 
 
 
 var ChatGLMWebSocket = await (async function(){
+	var basePath = "./plugins/chatztc";
 	var replyEnv = null;
 	//websocket必须设置回复环境
 	var setReplyFunc = function(user_id,env) {
@@ -50,7 +47,25 @@ var ChatGLMWebSocket = await (async function(){
 			})
 		})
 	}
- 
+
+	var getChatGLMConfig = async function(){
+		var config = null;
+		try {
+			config = JSON.parse(await fs.promises.readFile(new URL('./config/config.json', import.meta.url)));
+		} catch (error) {
+		}
+		return config;
+	};
+
+	var setChatGLMConfig = async function(config){
+		return await fs.promises.writeFile(new URL('./config/config.json', import.meta.url),JSON.stringify(config,null,"\t"));
+	};
+
+	ChatGLMConfig = await getChatGLMConfig();
+
+
+
+
 	//await writeFileAsync(`./plugins/example/data/${user_id}.json`,"123");
 	//var getdata = await readfileAsync(`./plugins/example/data/${user_id}.json`);
 	//logger.info('[ChatGLM,readfileAsync,getdata]', getdata);
@@ -64,7 +79,7 @@ var ChatGLMWebSocket = await (async function(){
 		}
 		var getdatajson = null;
 		try {
-			getdatajson = await readfileAsync(`./plugins/chatztc/data/${user_id}.json`);
+			getdatajson = await readfileAsync(basePath+`/data/${user_id}.json`);
 		} catch (error) {
 		}
 		var getdata = null;
@@ -91,7 +106,7 @@ var ChatGLMWebSocket = await (async function(){
         }else{
             var getdatajson = null;
             try {
-                getdatajson = await readfileAsync(`./plugins/chatztc/data/${user_id}.json`);
+                getdatajson = await readfileAsync(basePath+`/data/${user_id}.json`);
             } catch (error) {
             }
             if(getdatajson){
@@ -106,7 +121,7 @@ var ChatGLMWebSocket = await (async function(){
 		}
 		getdata[key] = data;
 		var getdatajson = JSON.stringify(getdata);
-		var ret = await writeFileAsync(`./plugins/chatztc/data/${user_id}.json`,getdatajson);
+		var ret = await writeFileAsync(basePath+`/data/${user_id}.json`,getdatajson);
         //从磁盘中读取之后写入缓存(不写读取时可能会读到旧的缓存)
         user_data_cache[user_id] = getdata;
 		return ret;
