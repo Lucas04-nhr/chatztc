@@ -188,6 +188,12 @@ var ChatGLMWebSocket = await (async function(){
 	}
 
 
+    var set_history_num = async function(history_num,user_id,_this){
+        ChatGLMConfig.history_num = history_num;
+        await setChatGLMConfig(ChatGLMConfig);
+        _this.reply("历史条数设置成功");
+    }
+
 	var post_data = function(data,callback){
 		logger.info('[ChatGLM,POST,send]', data);
 		var urlInfo = new URL(ChatGLMConfig.post_url);
@@ -298,6 +304,7 @@ var ChatGLMWebSocket = await (async function(){
 		get_character:get_character,
 		del_character:del_character,
 		get_config_text:get_config_text,
+        set_history_num:set_history_num,
 	};
 })();
 
