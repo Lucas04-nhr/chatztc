@@ -99,13 +99,6 @@ api.py和启动的bat下载，放在ChatGLM-webui根目录
 提取码：64jt
 
 
-如果是官方项目下载的api.py，就修改53，54行，就和我上传的文件一样了:
-
-	tokenizer = AutoTokenizer.from_pretrained("./model/chatglm-6b-int4", trust_remote_code=True)
-	model = AutoModel.from_pretrained("./model/chatglm-6b-int4", trust_remote_code=True).half().cuda()
-
-
-
 
 最后，ChatGLM官方项目地址
 https://github.com/THUDM/ChatGLM-6B
