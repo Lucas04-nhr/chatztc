@@ -374,8 +374,7 @@ export class ChatZTC extends plugin {
 				return false;
 			}
 		}
-		  logger.info('[用户信息]', e);//user_id 用户qq号
-		  logger.info('[用户信息，isMaster]', e.isMaster);//user_id 用户qq号
+		  //logger.info('[用户信息，isMaster]', e.isMaster);//user_id 用户qq号
 		  function isMaster(e){
 			  return e.isMaster;
 		  }
@@ -398,7 +397,11 @@ export class ChatZTC extends plugin {
 			});
 		}
 
-		async function set_history_num(chat_msg,user_id,_this){
+		async function set_history_num(chat_msg,user_id,_this,e){
+			if(!isMaster(e)){
+				_this.reply("只有主人能够进行这项配置");
+				return;
+			}
 			if(isNumber(chat_msg)){
 				chat_msg=parseInt(chat_msg);
 				await ChatGLMWebSocket.set_history_num(chat_msg,user_id,_this);
@@ -406,27 +409,35 @@ export class ChatZTC extends plugin {
 				_this.reply("末尾请输入数字，示例:"+ChatGLMWebSocket.get_config_text("set_history_num")+"3");
 			}
 		}
-		function get_history_num(chat_msg,user_id,_this){
+		function get_history_num(chat_msg,user_id,_this,e){
 			_this.reply("当前记忆条数:"+ChatGLMConfig.history_num);
 		}
-		  async function set_post_url(chat_msg,user_id,_this){
+		  async function set_post_url(chat_msg,user_id,_this,e){
+			  if(!isMaster(e)){
+				  _this.reply("只有主人能够进行这项配置");
+				  return;
+			  }
 			  if(chat_msg){
 				  await ChatGLMWebSocket.set_post_url(chat_msg,user_id,_this);
 			  }else{
 				  _this.reply("末尾请输入接口地址，示例:"+ChatGLMWebSocket.get_config_text("set_post_url")+"http://0.0.0.0:8000");
 			  }
 		  }
-		  function get_post_url(chat_msg,user_id,_this){
+		  function get_post_url(chat_msg,user_id,_this,e){
+			  if(!isMaster(e)){
+				  _this.reply("只有主人能够进行这项配置");
+				  return;
+			  }
 			  _this.reply("当前接口地址:"+ChatGLMConfig.post_url);
 		  }
-          async function set_character(chat_msg,user_id,_this){
+          async function set_character(chat_msg,user_id,_this,e){
               await ChatGLMWebSocket.set_character(chat_msg,user_id,_this);
           }
           async function get_character(chat_msg,user_id,_this,msgInfo){
 				var character = await ChatGLMWebSocket.get_character(chat_msg,user_id,_this);
 			  await _this.forwardMsg( _this, [character],msgInfo);
           }
-          async function del_character(chat_msg,user_id,_this){
+          async function del_character(chat_msg,user_id,_this,e){
               await ChatGLMWebSocket.del_character(chat_msg,user_id,_this);
           }
 		async function get_history(chat_msg,user_id,_this,msgInfo){
@@ -435,7 +446,7 @@ export class ChatZTC extends plugin {
 			await _this.forwardMsg( _this,history,msgInfo );
 			//_this.reply(JSON.stringify(await ChatGLMWebSocket.get_history(chat_msg,user_id,_this)));
 		}
-		async function del_history(chat_msg,user_id,_this){
+		async function del_history(chat_msg,user_id,_this,e){
             await await ChatGLMWebSocket.del_history(chat_msg,user_id,_this);
 		}
 		
@@ -465,37 +476,37 @@ export class ChatZTC extends plugin {
 		if(find_str_prefix_text){
 			switch (key_find){
 					case "help":
-						help(chat_msg,e.user_id,_this);
+						help(chat_msg,e.user_id,_this,e);
 						break;
 					case "chat":
-						chat(chat_msg,e.user_id,_this);
+						chat(chat_msg,e.user_id,_this,e);
 						break;
 					case "set_history_num":
-						await set_history_num(chat_msg,e.user_id,_this);
+						await set_history_num(chat_msg,e.user_id,_this,e);
 						break;
 					case "get_history_num":
-						get_history_num(chat_msg,e.user_id,_this);
+						get_history_num(chat_msg,e.user_id,_this,e);
 						break;
 					case "set_post_url":
-						await set_post_url(chat_msg,e.user_id,_this);
+						await set_post_url(chat_msg,e.user_id,_this,e);
 						break;
 					case "get_post_url":
-						get_post_url(chat_msg,e.user_id,_this);
+						get_post_url(chat_msg,e.user_id,_this,e);
 						break;
 					case "set_character":
-                        await set_character(chat_msg,e.user_id,_this);
+                        await set_character(chat_msg,e.user_id,_this,e);
 						break;
 					case "get_character":
                         await get_character(chat_msg,e.user_id,_this,e);
 						break;
 					case "del_character":
-                        await del_character(chat_msg,e.user_id,_this);
+                        await del_character(chat_msg,e.user_id,_this,e);
 						break;
 					case "get_history":
 						await get_history(chat_msg,e.user_id,_this,e);
 						break;
 					case "del_history":
-                        await del_history(chat_msg,e.user_id,_this);
+                        await del_history(chat_msg,e.user_id,_this,e);
 						break;
 					default :
 						find_str_prefix_text = false;
@@ -523,7 +534,7 @@ export class ChatZTC extends plugin {
 		//不是#开头的字符串进来了可以直接触发聊天
 		if(ChatGLMConfig.answer_all_chat && ChatGLMConfig.public_prefix != e.msg.substr(0,ChatGLMConfig.public_prefix.length)){
 			if(!find_str_prefix_text){
-				chat(chat_msg,e.user_id,_this);
+				chat(chat_msg,e.user_id,_this,e);
 			}
 		}
 	  };
