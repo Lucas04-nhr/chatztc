@@ -36,11 +36,11 @@ git clone --depth=1 https://gitee.com/394911284/chatztc.git ./plugins/chatztc/
 
 #### qq聊天界面使用说明
 
-    ------ai指令列表------
-    
+------ai指令列表------
+
     #ai帮助
         唤出ai帮助
-
+    
     #ai:
         使用ChatGLM进行聊天,示例:#ai:你好
     
@@ -56,6 +56,18 @@ git clone --depth=1 https://gitee.com/394911284/chatztc.git ./plugins/chatztc/
     #ai获取设置的记忆条数
         用来获取ai保存的历史聊天数量
     
+    #ai查看下次发送的历史聊天
+        发给ai的历史包括设定的人设的对话和记忆条数内的几次对话
+    
+    #ai清除下次发送的历史聊天
+        清除记忆条数内的几次对话，不清除人设，也不会清除聊天记录
+    
+    #ai关闭直接对话
+        关闭不带前缀直接和ai对话，防止影响群友聊天或者其他插件，重启云崽之后可以彻底取消监听
+    
+    #ai开启直接对话
+        开启不带前缀直接和ai对话，可能需要重启云崽才会生效
+    
     #ai设置人设
         将上次对白设置为人设，会将上次的对白添加在历史聊天的顶部
     
@@ -70,6 +82,7 @@ git clone --depth=1 https://gitee.com/394911284/chatztc.git ./plugins/chatztc/
     
     #aidellog
         删除聊天历史
+
 
 
 
