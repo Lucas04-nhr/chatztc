@@ -117,6 +117,11 @@ https://github.com/THUDM/ChatGLM-6B
 ChatRWKV懒人版python包
 https://zhuanlan.zhihu.com/p/612879065
 
+模型推荐使用这个（适合聊天，适合完成任务，包括写代码）
+RWKV-4-Raven-7B-v7-ChnEng-20230404-ctx2048.pth
+下载地址
+https://huggingface.co/BlinkDL/rwkv-4-raven/tree/main
+
 
 我写的api启动文件
 api.py和启动的run_api.bat下载，放在ChatRWKV根目录
