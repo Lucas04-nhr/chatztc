@@ -22,9 +22,8 @@ git clone --depth=1 https://gitee.com/394911284/chatztc.git ./plugins/chatztc/
 
 	./plugins/chatztc/config/config.json
 
-	"history_num": 3,//用来设置ai保存的历史聊天数量,数量太多可能会爆显存（设置了人设会额外发送一条在最前面）
+
 	"automatic_suggestion_order": true,//当指令不正确时，是否进行建议
-	"answer_all_chat": true,//是否让插件关闭直接对话，就是不能直接说'你好'，只能使用指令匹配'#ai:你好'
 	"public_prefix": "#ai",//公共的指令头（和其他插件指令冲突时修改，或者改为自己觉得方便的指令头）
 
 
