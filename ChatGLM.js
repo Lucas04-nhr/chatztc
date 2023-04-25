@@ -242,6 +242,7 @@ var ChatGLMWebSocket = await (async function(){
 			});
 		})
 		req.on('error', (error) => {
+				callback(error);
 		  logger.info('[ChatGLM,POST,error]',error)
 		})
 		req.write(data_str)
@@ -255,7 +256,7 @@ var ChatGLMWebSocket = await (async function(){
     var ws_send_arr = []; 
 		
 	
-    var send_msg = async function(msg,user_id,callback){
+    var send_msg = async function(msg,user_id,_this,callback){
 		//设置ai的历史记忆
 			var history_temp_arr = [];
 			var chat_character = await _get_chat_character(user_id);
@@ -277,7 +278,13 @@ var ChatGLMWebSocket = await (async function(){
 				}
 			}
 			post_data({"prompt": msg, "history": history_temp_arr},async function(ret_data){
-				var ret_obj = JSON.parse(ret_data);
+				var ret_obj;
+				try {
+					ret_obj = JSON.parse(ret_data);
+				} catch (error) {
+					_this.reply(error);
+					_this.reply(ret_data);
+				}
 				if(ret_obj && ret_obj.history){
 					chat_history.push(ret_obj.history[ret_obj.history.length-1]);
 					//logger.info('[ChatGLM,chat_history]', chat_history);
@@ -390,7 +397,7 @@ export class ChatZTC extends plugin {
 		function chat(chat_msg,user_id,_this){
 			ChatGLMWebSocket.setReplyFunc(user_id,this);
 			//var res = ChatGLMWebSocket.ws_send({"fn_index":0,"data":[null,chat_msg,2048,0.7,0.95,true],"event_data":null,"session_hash":ChatGLMWebSocket.getSessionHash()});
-			ChatGLMWebSocket.send_msg(chat_msg,user_id,function(res_msg){
+			ChatGLMWebSocket.send_msg(chat_msg,user_id,_this,function(res_msg){
 				if(res_msg){
 					_this.reply(res_msg);
 				}
