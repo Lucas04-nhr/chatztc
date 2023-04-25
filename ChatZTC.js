@@ -304,7 +304,7 @@ var ChatGLMWebSocket = await (async function(){
 
 	var send_msg = async function(msg,user_id,_this,callback){
 		//设置ai的历史记忆
-		var history_temp_arr = get_history_with_character_to_post(msg,user_id,_this);
+		var history_temp_arr = await get_history_with_character_to_post(msg,user_id,_this);
 		post_data({"prompt": msg, "history": history_temp_arr},async function(ret_data){
 			var ret_obj;
 			try {
@@ -438,7 +438,7 @@ export class ChatZTC extends plugin {
 			function help(chat_msg,user_id,_this){
 				var help_str = "------ai指令列表------";
 				for(var key in ChatGLMConfig.str_prefix){
-					help_str+='\n'+ChatGLMWebSocket.get_config_text(key)+'\n'+"    "+ChatGLMConfig.str_prefix[key].note;
+					help_str+='\n\n'+ChatGLMWebSocket.get_config_text(key)+'\n'+"    "+ChatGLMConfig.str_prefix[key].note;
 				}
 				_this.reply(help_str);
 			}
