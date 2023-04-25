@@ -1,8 +1,8 @@
-# ChatGLM的api插件
+# ChatGLM，ChatRWKV的api插件
 
 #### 介绍
 
-这是一个对接ChatGLM的聊天api的云崽bot插件
+这是一个对接ChatGLM，ChatRWKV的聊天api的云崽bot插件
 
 #### 安装教程
 
@@ -79,6 +79,9 @@ git clone --depth=1 https://gitee.com/394911284/chatztc.git ./plugins/chatztc/
 
 
 
+======================ChatGLM安装说明============================
+
+
 ChatGLM秋叶大神的整合包在这里
 https://www.bilibili.com/video/BV1E24y1u7Go/?spm_id_from=333.999.0.0&vd_source=69701cb5cfa769975f4fcee38b58440f
 
@@ -102,5 +105,25 @@ api.py和启动的bat下载，放在ChatGLM-webui根目录
 
 最后，ChatGLM官方项目地址
 https://github.com/THUDM/ChatGLM-6B
+
+======================ChatGLM安装说明============================
+
+
+
+======================ChatRWKV安装说明============================
+
+
+
+ChatRWKV懒人版python包
+https://zhuanlan.zhihu.com/p/612879065
+
+
+我写的api启动文件
+api.py和启动的run_api.bat下载，放在ChatRWKV根目录
+链接：https://pan.baidu.com/s/1s-F9YwBON-28R5e6PjqRIQ 
+提取码：irvw
+
+
+======================ChatRWKV安装说明============================
 
 
