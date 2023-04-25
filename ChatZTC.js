@@ -438,7 +438,7 @@ export class ChatZTC extends plugin {
 			function help(chat_msg,user_id,_this){
 				var help_str = "------ai指令列表------";
 				for(var key in ChatGLMConfig.str_prefix){
-					help_str+='\n\n'+ChatGLMWebSocket.get_config_text(key)+'\n'+"    "+ChatGLMConfig.str_prefix[key].note;
+					help_str+='\n'+ChatGLMWebSocket.get_config_text(key)+'\n'+"    "+ChatGLMConfig.str_prefix[key].note;
 				}
 				_this.reply(help_str);
 			}
@@ -471,7 +471,7 @@ export class ChatZTC extends plugin {
 			async function get_history_to_post(chat_msg,user_id,_this,e){
 				var history = await ChatGLMWebSocket.get_history_with_character_to_post(chat_msg,user_id,_this);
 				// logger.info('get_history_with_character_to_post,', history);//
-				await _this.forwardMsg( _this,history,msgInfo );
+				await _this.forwardMsg( _this,history,e );
 			}
 			async function clear_history_to_post(chat_msg,user_id,_this,e){
 				await ChatGLMWebSocket.clear_history_to_post(chat_msg,user_id,_this);
