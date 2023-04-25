@@ -141,6 +141,12 @@ api.py和启动的run_api.bat下载，放在ChatRWKV根目录
 链接：https://pan.baidu.com/s/1s-F9YwBON-28R5e6PjqRIQ 
 提取码：irvw
 
+启动前需要调整api.py 43行到46行之间的内容，包括RWKV_CUDA_ON是否开启，模型路径和运算使用的strategy参数
+os.environ["RWKV_CUDA_ON"] = '1' # '1' to compile CUDA kernel (10x faster), requires c++ compiler & cuda libraries
+
+from rwkv.model import RWKV # pip install rwkv
+model = RWKV(model='C:/Users/ZTC/Documents/RWKV-4-Raven-7B-v7-ChnEng-20230404-ctx2048', strategy='cuda fp16i8 *31+')
+
 
 ==============ChatRWKV安装说明==============
 
