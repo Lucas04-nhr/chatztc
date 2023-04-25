@@ -616,7 +616,12 @@ export class ChatZTC extends plugin {
 					key_rate_arr.sort(function(a,b){
 						return b.rate-a.rate;
 					});
-					_this.reply("您想使用的指令是这个吗:'"+key_rate_arr[0].text+"'"+'\n'+"如果需要所有指令及说明，请输入'"+ChatGLMWebSocket.get_config_text("help")+"'");
+					//_this.reply("您想使用的指令是这个吗:'"+key_rate_arr[0].text+"'"+'\n'+"如果需要所有指令及说明，请输入'"+ChatGLMWebSocket.get_config_text("help")+"'");
+					_this.forwardMsg( _this,[
+						["您想使用的指令是这个吗:"],
+						[key_rate_arr[0].text],
+						["如果需要所有指令及说明，请输入'"+ChatGLMWebSocket.get_config_text("help")+"'"],
+					],e );
 					//logger.info('[用户聊天,没有找到完全匹配的关键词前缀]', key_rate_arr);
 				}
 			}
@@ -635,20 +640,30 @@ export class ChatZTC extends plugin {
 	makeMsg = ({ data,msgInfo }) => {
 		const msgList = []
 		for (let item of data) {
-			msgList.push({
-				message: item[0],
-				/*我的昵称*/
-				nickname: msgInfo.nickname,
-				/*我的账号*/
-				user_id: msgInfo.user_id,
-			})
-			msgList.push({
-				message: item[1],
-				/*我的昵称*/
-				nickname: Bot.nickname,
-				/*我的账号*/
-				user_id: Bot.uin,
-			})
+			if(item.length>1){
+				msgList.push({
+					message: item[0],
+					/*我的昵称*/
+					nickname: msgInfo.nickname,
+					/*我的账号*/
+					user_id: msgInfo.user_id,
+				})
+				msgList.push({
+					message: item[1],
+					/*我的昵称*/
+					nickname: Bot.nickname,
+					/*我的账号*/
+					user_id: Bot.uin,
+				})
+			}else{
+				msgList.push({
+					message: item[0],
+					/*我的昵称*/
+					nickname: Bot.nickname,
+					/*我的账号*/
+					user_id: Bot.uin,
+				})
+			}
 		}
 		return msgList
 	}
