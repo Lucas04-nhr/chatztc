@@ -165,15 +165,15 @@ var ChatGLMWebSocket = await (async function(){
 
 
 	var set_character = async function(chat_msg,user_id,_this){
-		var chat_history = await _get_chat_history(user_id);
-		if(!chat_history){
-			chat_history = [];
+		var history_to_post = await _get_history_to_post(user_id);
+		if(!history_to_post){
+			history_to_post = [];
 		}
-		if(chat_history.length>0){
-			var chat_character = chat_history[chat_history.length-1];
+		if(history_to_post.length>0){
+			var chat_character = history_to_post[history_to_post.length-1];
 			await _set_chat_character(user_id,chat_character);
-			chat_history = chat_history.slice(0,chat_history.length-1);//同时删除对白记录的最后一条
-			await _set_chat_history(user_id,chat_history);
+			history_to_post = history_to_post.slice(0,history_to_post.length-1);//同时删除对白记录的最后一条
+			await _set_history_to_post(user_id,history_to_post);
 			_this.reply("人设设置成功");
 		}else{
 			_this.reply("还没有历史对白，请先进行一次对话");
