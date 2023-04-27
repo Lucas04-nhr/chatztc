@@ -32,6 +32,8 @@ git clone --depth=1 https://gitee.com/394911284/chatztc.git ./plugins/chatztc/
         cd ./plugins/chatztc/
         git pull
 
+如果帮助还是没有变，可以备份并删除config.json，然后重启，新生成的就会有所有的帮助指令了
+
 
 #### qq聊天界面使用说明
 
