@@ -136,9 +136,9 @@ https://huggingface.co/BlinkDL/rwkv-4-raven/tree/main
 
 
 我写的api启动文件
-api.py和启动的run_api.bat下载，放在ChatRWKV根目录
-链接：https://pan.baidu.com/s/1s-F9YwBON-28R5e6PjqRIQ 
-提取码：irvw
+api.py和启动的run_api.bat下载，放在ChatRWKV根目录（最新的api第一次运行会处理数据并缓存，第二次运行才能跑起来，第二次会快很多）
+链接：https://pan.baidu.com/s/1aq2X9YFh15rf1yJGEwpuIw 
+提取码：18f6
 
 启动前需要调整api.py 43行到46行之间的内容，包括RWKV_CUDA_ON是否开启，模型路径和运算使用的strategy参数
 os.environ["RWKV_CUDA_ON"] = '1' # '1' to compile CUDA kernel (10x faster), requires c++ compiler & cuda libraries
