@@ -147,9 +147,9 @@ api.py和启动的run_api.bat下载，放在ChatRWKV根目录（最新的api第�
 os.environ['RWKV_JIT_ON'] = '1'
 os.environ["RWKV_CUDA_ON"] = '1' # '1' to compile CUDA kernel (10x faster), requires c++ compiler & cuda libraries
 from rwkv.model import RWKV # pip install rwkv
-# 模型路径，后面不需要加.pth
+  #模型路径，后面不需要加.pth
 model_path='C:/Users/ZTC/Documents/RWKV-4-Raven-7B-v7-ChnEng-20230404-ctx2048'
-# 运行模式，见官方文档说明，修改配置之后，需要去模型所在的目录删除缓存文件，就是带"-convert.pth"结尾的文件
+  #运行模式，见官方文档说明，修改配置之后，需要去模型所在的目录删除缓存文件，就是带"-convert.pth"结尾的文件
 strategy_set='cuda fp16i8 *31+'
 
 ==============ChatRWKV安装说明==============
