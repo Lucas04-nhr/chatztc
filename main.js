@@ -523,7 +523,10 @@ export class ChatZTC extends plugin {
 			}
 			async function get_history(chat_msg,user_id,_this,msgInfo){
 				var history = await ChatGLMWebSocket.get_history(chat_msg,user_id,_this);
-				// logger.info('get_history,', history);//
+				 //logger.info('get_history,', history);//
+				 if(history && history.length>50){
+					 history = history.slice(history.length-50);
+				 }
 				await _this.forwardMsg( _this,history,msgInfo );
 				//_this.reply_new(JSON.stringify(await ChatGLMWebSocket.get_history(chat_msg,user_id,_this)));
 			}
