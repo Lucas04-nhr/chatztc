@@ -651,9 +651,9 @@ export class ChatZTC extends plugin {
 				}
 				var config = {};
 				//把他在群里改成@回复，关闭直接对话后可以私聊回复
-				if(ChatGLMConfig.answer_all_chat){
-					config["at"]=true;
-				}
+				//if(ChatGLMConfig.answer_all_chat){
+				//	config["at"]=true;
+				//}
 				return config
 			}
 			reply_new = (msg, quote, data) => {
