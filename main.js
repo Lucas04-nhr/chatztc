@@ -17,7 +17,7 @@ var ChatGLMWebSocket = await (async function(){
 	}
 	var qqreply = function(msg = '', quote = false, data = {}) {
 		if(replyEnv){
-			replyEnv.reply(msg, quote, data);
+			replyEnv.reply_new(msg, quote, data);
 		}
 	}
 
@@ -174,9 +174,9 @@ var ChatGLMWebSocket = await (async function(){
 			await _set_chat_character(user_id,chat_character);
 			history_to_post = history_to_post.slice(0,history_to_post.length-1);//同时删除对白记录的最后一条
 			await _set_history_to_post(user_id,history_to_post);
-			_this.reply("人设设置成功");
+			_this.reply_new("人设设置成功");
 		}else{
-			_this.reply("还没有历史对白，请先进行一次对话");
+			_this.reply_new("还没有历史对白，请先进行一次对话");
 		}
 	}
 	var get_character = async function(chat_msg,user_id,_this){
@@ -184,19 +184,19 @@ var ChatGLMWebSocket = await (async function(){
 		if(chat_character){
 			return chat_character;
 		}else{
-			_this.reply("还没有设置人设，请先设置人设");
+			_this.reply_new("还没有设置人设，请先设置人设");
 		}
 	}
 	var del_character = async function(chat_msg,user_id,_this){
 		await _set_chat_character(user_id,null);
-		_this.reply("删除人设完成");
+		_this.reply_new("删除人设完成");
 	}
 	var get_history = async function(chat_msg,user_id,_this){
 		return await _get_chat_history(user_id);
 	}
 	var del_history = async function(chat_msg,user_id,_this){
 		await _set_chat_history(user_id,[]);
-		_this.reply("清除历史成功");
+		_this.reply_new("清除历史成功");
 		return ;
 	}
 
@@ -204,23 +204,23 @@ var ChatGLMWebSocket = await (async function(){
 	var set_history_num = async function(history_num,user_id,_this){
 		ChatGLMConfig.history_num = history_num;
 		await setChatGLMConfig(ChatGLMConfig);
-		_this.reply("设置成功，当前记忆条数:"+ChatGLMConfig.history_num);
+		_this.reply_new("设置成功，当前记忆条数:"+ChatGLMConfig.history_num);
 	}
 	var answer_all_chat_off = async function(chat_msg,user_id,_this){
 		ChatGLMConfig.answer_all_chat = false;
 		await setChatGLMConfig(ChatGLMConfig);
-		_this.reply("设置成功，关闭直接对话");
+		_this.reply_new("设置成功，关闭直接对话");
 	}
 	var answer_all_chat_on = async function(chat_msg,user_id,_this){
 		ChatGLMConfig.answer_all_chat = true;
 		await setChatGLMConfig(ChatGLMConfig);
-		_this.reply("设置成功，开启直接对话，可能需要重启云崽才会生效");
+		_this.reply_new("设置成功，开启直接对话，可能需要重启云崽才会生效");
 	}
 
 	var set_post_url = async function(post_url,user_id,_this){
 		ChatGLMConfig.post_url = post_url;
 		await setChatGLMConfig(ChatGLMConfig);
-		_this.reply("设置成功，当前接口地址:"+ChatGLMConfig.post_url);
+		_this.reply_new("设置成功，当前接口地址:"+ChatGLMConfig.post_url);
 	}
 
 
@@ -248,7 +248,7 @@ var ChatGLMWebSocket = await (async function(){
 	}
 	var clear_history_to_post = async function(chat_msg,user_id,_this){
 		await _set_history_to_post(user_id,[]);
-		_this.reply("清除下次发给ai的历史聊天成功");
+		_this.reply_new("清除下次发给ai的历史聊天成功");
 		return ;
 	}
 
@@ -310,8 +310,8 @@ var ChatGLMWebSocket = await (async function(){
 			try {
 				ret_obj = JSON.parse(ret_data);
 			} catch (error) {
-				_this.reply(error);
-				_this.reply(ret_data);
+				_this.reply_new(error);
+				_this.reply_new(ret_data);
 			}
 			if(ret_obj && ret_obj.history){
 				var chat_history_row = ret_obj.history[ret_obj.history.length-1];
@@ -415,7 +415,7 @@ export class ChatZTC extends plugin {
 		this.get_user_msg = async function(e) {
 			var _this = this;
 			logger.info('[用户命令]', e.msg);
-			//this.reply("用户发送的内容为:"+e.msg)
+			//this.reply_new("用户发送的内容为:"+e.msg)
 			//logger.info('[用户信息]', e);//user_id 用户qq号
 			var complete_msg = e.msg;
 			var chat_msg = e.msg;
@@ -435,12 +435,15 @@ export class ChatZTC extends plugin {
 				return e.isMaster;
 			}
 			//用户帮助
-			function help(chat_msg,user_id,_this){
-				var help_str = "------ai指令列表------";
+			async function help(chat_msg,user_id,_this,e){
+				var help_arr = [["下面是指令和对应的说明"]];
+				//var help_str = "------ai指令列表------";
 				for(var key in ChatGLMConfig.str_prefix){
-					help_str+='\n\n'+ChatGLMWebSocket.get_config_text(key)+'\n'+"    "+ChatGLMConfig.str_prefix[key].note;
+				//	help_str+='\n\n'+ChatGLMWebSocket.get_config_text(key)+'\n'+"    "+ChatGLMConfig.str_prefix[key].note;
+					help_arr.push([ChatGLMWebSocket.get_config_text(key),"上面指令说明:"+ChatGLMConfig.str_prefix[key].note]);
 				}
-				_this.reply(help_str);
+				//_this.reply_new(help_str);
+				await _this.forwardMsg( _this,help_arr,e );
 			}
 			//调用ai聊天对话
 			function chat(chat_msg,user_id,_this){
@@ -448,25 +451,25 @@ export class ChatZTC extends plugin {
 				//var res = ChatGLMWebSocket.ws_send({"fn_index":0,"data":[null,chat_msg,2048,0.7,0.95,true],"event_data":null,"session_hash":ChatGLMWebSocket.getSessionHash()});
 				ChatGLMWebSocket.send_msg(chat_msg,user_id,_this,function(res_msg){
 					if(res_msg){
-						_this.reply(res_msg);
+						_this.reply_new(res_msg);
 					}
 				});
 			}
 
 			async function set_history_num(chat_msg,user_id,_this,e){
 				if(!isMaster(e)){
-					_this.reply("只有主人能够进行这项配置");
+					_this.reply_new("只有主人能够进行这项配置");
 					return;
 				}
 				if(isNumber(chat_msg)){
 					chat_msg=parseInt(chat_msg);
 					await ChatGLMWebSocket.set_history_num(chat_msg,user_id,_this);
 				}else{
-					_this.reply("末尾请输入数字，示例:"+ChatGLMWebSocket.get_config_text("set_history_num")+"3");
+					_this.reply_new("末尾请输入数字，示例:"+ChatGLMWebSocket.get_config_text("set_history_num")+"3");
 				}
 			}
 			function get_history_num(chat_msg,user_id,_this,e){
-				_this.reply("当前记忆条数:"+ChatGLMConfig.history_num);
+				_this.reply_new("当前记忆条数:"+ChatGLMConfig.history_num);
 			}
 			async function get_history_to_post(chat_msg,user_id,_this,e){
 				var history = await ChatGLMWebSocket.get_history_with_character_to_post(chat_msg,user_id,_this);
@@ -478,35 +481,35 @@ export class ChatZTC extends plugin {
 			}
 			async function answer_all_chat_off(chat_msg,user_id,_this,e){
 				if(!isMaster(e)){
-					_this.reply("只有主人能够进行这项配置");
+					_this.reply_new("只有主人能够进行这项配置");
 					return;
 				}
 				await ChatGLMWebSocket.answer_all_chat_off(chat_msg,user_id,_this);
 			}
 			async function answer_all_chat_on(chat_msg,user_id,_this,e){
 				if(!isMaster(e)){
-					_this.reply("只有主人能够进行这项配置");
+					_this.reply_new("只有主人能够进行这项配置");
 					return;
 				}
 				await ChatGLMWebSocket.answer_all_chat_on(chat_msg,user_id,_this);
 			}
 			async function set_post_url(chat_msg,user_id,_this,e){
 				if(!isMaster(e)){
-					_this.reply("只有主人能够进行这项配置");
+					_this.reply_new("只有主人能够进行这项配置");
 					return;
 				}
 				if(chat_msg){
 					await ChatGLMWebSocket.set_post_url(chat_msg,user_id,_this);
 				}else{
-					_this.reply("末尾请输入接口地址，示例:"+ChatGLMWebSocket.get_config_text("set_post_url")+"http://0.0.0.0:8000");
+					_this.reply_new("末尾请输入接口地址，示例:"+ChatGLMWebSocket.get_config_text("set_post_url")+"http://0.0.0.0:8000");
 				}
 			}
 			function get_post_url(chat_msg,user_id,_this,e){
 				if(!isMaster(e)){
-					_this.reply("只有主人能够进行这项配置");
+					_this.reply_new("只有主人能够进行这项配置");
 					return;
 				}
-				_this.reply("当前接口地址:"+ChatGLMConfig.post_url);
+				_this.reply_new("当前接口地址:"+ChatGLMConfig.post_url);
 			}
 			async function set_character(chat_msg,user_id,_this,e){
 				await ChatGLMWebSocket.set_character(chat_msg,user_id,_this);
@@ -522,12 +525,11 @@ export class ChatZTC extends plugin {
 				var history = await ChatGLMWebSocket.get_history(chat_msg,user_id,_this);
 				// logger.info('get_history,', history);//
 				await _this.forwardMsg( _this,history,msgInfo );
-				//_this.reply(JSON.stringify(await ChatGLMWebSocket.get_history(chat_msg,user_id,_this)));
+				//_this.reply_new(JSON.stringify(await ChatGLMWebSocket.get_history(chat_msg,user_id,_this)));
 			}
 			async function del_history(chat_msg,user_id,_this,e){
 				await await ChatGLMWebSocket.del_history(chat_msg,user_id,_this);
 			}
-
 			//如果使用了聊天开头字符串匹配，则切掉头部
 			//识别使用的指令并调用对应的函数
 
@@ -554,7 +556,7 @@ export class ChatZTC extends plugin {
 			if(find_str_prefix_text){
 				switch (key_find){
 					case "help":
-						help(chat_msg,e.user_id,_this,e);
+						await help(chat_msg,e.user_id,_this,e);
 						break;
 					case "chat":
 						chat(chat_msg,e.user_id,_this,e);
@@ -616,7 +618,7 @@ export class ChatZTC extends plugin {
 					key_rate_arr.sort(function(a,b){
 						return b.rate-a.rate;
 					});
-					//_this.reply("您想使用的指令是这个吗:'"+key_rate_arr[0].text+"'"+'\n'+"如果需要所有指令及说明，请输入'"+ChatGLMWebSocket.get_config_text("help")+"'");
+					//_this.reply_new("您想使用的指令是这个吗:'"+key_rate_arr[0].text+"'"+'\n'+"如果需要所有指令及说明，请输入'"+ChatGLMWebSocket.get_config_text("help")+"'");
 					_this.forwardMsg( _this,[
 						["您想使用的指令是这个吗:"],
 						[key_rate_arr[0].text],
@@ -634,6 +636,29 @@ export class ChatZTC extends plugin {
 			}
 		};
 	}
+	
+			get_reply_config = (type) => {
+				if(!type){
+					type = "reply";
+				}
+				if(type=="reply"){
+					
+				}else if(type=="forwardMsg"){
+					
+				}
+				var config = {};
+				//把他在群里改成@回复，关闭直接对话后可以私聊回复
+				if(ChatGLMConfig.answer_all_chat){
+					config["at"]=true;
+				}
+				return config
+			}
+			reply_new = (msg, quote, data) => {
+				if(!data){
+					data = this.get_reply_config("reply");
+				}
+				this.reply(msg, quote, data);
+			}
 	/**
 	 * 折合消息
 	 */
@@ -672,7 +697,7 @@ export class ChatZTC extends plugin {
 	 */
 	forwardMsg = async ( e, data,msgInfo ) => {
 		/*制作合并转发消息以备发送*/
-		await e.reply(await Bot.makeForwardMsg(this.makeMsg({ data,msgInfo })))
+		await e.reply(await Bot.makeForwardMsg(this.makeMsg({ data,msgInfo })),false,this.get_reply_config("forwardMsg"));
 		return
 	}
 }
