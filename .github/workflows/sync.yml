@@ -1,0 +1,27 @@
+name: Sync from Gitee
+
+on:
+  schedule:
+    - cron: '0 16 * * *'  # This runs the workflow every day at 0:00 GMT+8 (16:00 UTC)
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Git
+      run: |
+        git config user.name "Lucas04-nhr"
+        git config user.email "lucas04@foxmail.com"
+
+    - name: Pull from Gitee
+      run: |
+        git remote add gitee https://gitee.com/394911284/chatztc.git
+        git pull gitee master  # Assuming 'main' is your default branch, change it if needed
+
+    - name: Push to GitHub
+      run: |
+        git push origin master  # Assuming 'main' is your default branch, change it if needed
